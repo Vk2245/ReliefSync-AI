@@ -1,1 +1,1 @@
-# Routers module
+# Simple routers for quick deployment

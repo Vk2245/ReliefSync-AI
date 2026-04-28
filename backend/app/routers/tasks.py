@@ -8,7 +8,7 @@ import uuid
 import structlog
 
 from ..core.security import get_current_user, require_role
-from ..core.firebase import get_firestore_client
+from ..core.supabase import get_supabase_client
 from ..models.schemas import TaskCreate, TaskResponse, TaskStatus
 
 logger = structlog.get_logger(__name__)

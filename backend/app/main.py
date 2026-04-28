@@ -11,7 +11,7 @@ import time
 from .core.config import get_settings
 from .core.security import rate_limit_middleware
 from .models.schemas import HealthCheck
-from .routers import emergencies, volunteers, tasks, analytics
+from .routers import simple
 
 # ── Structured Logging ──────────────────────────────────────────
 structlog.configure(
@@ -73,10 +73,7 @@ async def request_middleware(request: Request, call_next):
 
 
 # ── Routers ─────────────────────────────────────────────────────
-app.include_router(emergencies.router, prefix=settings.API_PREFIX)
-app.include_router(volunteers.router, prefix=settings.API_PREFIX)
-app.include_router(tasks.router, prefix=settings.API_PREFIX)
-app.include_router(analytics.router, prefix=settings.API_PREFIX)
+app.include_router(simple.router, prefix=settings.API_PREFIX)
 
 
 # ── Health Check ────────────────────────────────────────────────
