@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ReliefSync AI — AI-powered crisis response and volunteer coordination platform for NGOs, governments, and disaster relief agencies. Smart resource allocation powered by Google Gemini.">
+    <meta name="keywords" content="disaster relief, volunteer coordination, AI, crisis response, NGO, Google Cloud, Gemini AI">
+    <meta name="author" content="ReliefSync AI Team">
+    <meta name="theme-color" content="#0f172a">
+    
+    <title>ReliefSync AI — Intelligent Crisis Response Platform</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Maps -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization,places&callback=initMap"></script>
+    
+    <link rel="stylesheet" href="src/styles/index.css">
+</head>
+<body>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- NAVIGATION                                                  -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <nav class="navbar" id="main-nav">
+        <div class="nav-brand">
+            <div class="logo-icon">
+                <i class="fas fa-shield-heart"></i>
+            </div>
+            <span class="brand-text">ReliefSync<span class="brand-accent">AI</span></span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="#emergencies" class="nav-link" data-page="emergencies">
+                <i class="fas fa-triangle-exclamation"></i> Emergencies
+            </a>
+            <a href="#volunteers" class="nav-link" data-page="volunteers">
+                <i class="fas fa-people-group"></i> Volunteers
+            </a>
+            <a href="#map" class="nav-link" data-page="map">
+                <i class="fas fa-map-location-dot"></i> Crisis Map
+            </a>
+            <a href="#ai" class="nav-link" data-page="ai">
+                <i class="fas fa-brain"></i> AI Engine
+            </a>
+            <a href="#analytics" class="nav-link" data-page="analytics">
+                <i class="fas fa-chart-pie"></i> Analytics
+            </a>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-icon" id="theme-toggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="btn-icon notification-bell" id="notification-bell" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notification-count">3</span>
+            </button>
+            <div class="user-avatar" id="user-menu">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff&size=40" alt="User avatar">
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- MAIN CONTENT                                                -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <main class="main-content" id="main-content">
+        
+        <!-- ─── DASHBOARD PAGE ──────────────────────────────────── -->
+        <section class="page active" id="page-dashboard">
+            <div class="page-header">
+                <div>
+                    <h1>Command Center</h1>
+                    <p class="page-subtitle">Real-time crisis monitoring and coordination</p>
+                </div>
+                <div class="header-actions">
+                    <span class="live-indicator"><span class="pulse-dot"></span> Live</span>
+                    <button class="btn btn-primary" id="btn-report-emergency">
+                        <i class="fas fa-plus"></i> Report Emergency
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card stat-emergencies">
+                    <div class="stat-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-active-emergencies">12</span>
+                        <span class="stat-label">Active Crises</span>
+                    </div>
+                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 3 today</div>
+                </div>
+                <div class="stat-card stat-volunteers">
+                    <div class="stat-icon"><i class="fas fa-people-group"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-active-volunteers">847</span>
+                        <span class="stat-label">Active Volunteers</span>
+                    </div>
+                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 24 deployed</div>
+                </div>
+                <div class="stat-card stat-tasks">
+                    <div class="stat-icon"><i class="fas fa-list-check"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-tasks-completed">156</span>
+                        <span class="stat-label">Tasks Completed</span>
+                    </div>
+                    <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 89% rate</div>
+                </div>
+                <div class="stat-card stat-response">
+                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-response-time">8.2<small>min</small></span>
+                        <span class="stat-label">Avg Response Time</span>
+                    </div>
+                    <div class="stat-trend down"><i class="fas fa-arrow-down"></i> -12%</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-grid">
+                <!-- Recent Emergencies -->
+                <div class="card card-lg" id="recent-emergencies-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-fire"></i> Active Emergencies</h2>
+                        <button class="btn btn-ghost btn-sm">View All →</button>
+                    </div>
+                    <div class="emergency-list" id="emergency-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- AI Insights Panel -->
+                <div class="card" id="ai-insights-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-brain"></i> AI Insights</h2>
+                        <span class="badge badge-ai">Gemini 2.0</span>
+                    </div>
+                    <div class="ai-insights" id="ai-insights">
+                        <div class="insight-item">
+                            <div class="insight-icon critical"><i class="fas fa-exclamation-circle"></i></div>
+                            <div class="insight-content">
+                                <strong>Flood risk escalating</strong>
+                                <p>Chennai region shows 87% probability of severe flooding in next 12 hours. Pre-position 200 volunteers recommended.</p>
+                                <span class="insight-time">2 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon warning"><i class="fas fa-chart-line"></i></div>
+                            <div class="insight-content">
+                                <strong>Resource shortage predicted</strong>
+                                <p>Medical supplies in Mumbai warehouse will deplete in 18 hours at current consumption rate.</p>
+                                <span class="insight-time">15 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-icon success"><i class="fas fa-user-check"></i></div>
+                            <div class="insight-content">
+                                <strong>Volunteer match optimization</strong>
+                                <p>AI matched 45 volunteers with 94.2% skill relevance for Kolkata earthquake response.</p>
+                                <span class="insight-time">1 hour ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mini Map -->
+                <div class="card card-map" id="mini-map-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-map"></i> Crisis Heatmap</h2>
+                        <button class="btn btn-ghost btn-sm" data-page="map">Expand →</button>
+                    </div>
+                    <div class="map-container" id="mini-map"></div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card" id="activity-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clock-rotate-left"></i> Live Activity</h2>
+                    </div>
+                    <div class="activity-feed" id="activity-feed">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── EMERGENCIES PAGE ────────────────────────────────── -->
+        <section class="page" id="page-emergencies">
+            <div class="page-header">
+                <div>
+                    <h1>Emergency Management</h1>
+                    <p class="page-subtitle">Report, track, and coordinate crisis response</p>
+                </div>
+                <button class="btn btn-danger" id="btn-new-emergency">
+                    <i class="fas fa-plus"></i> Report Emergency
+                </button>
+            </div>
+            <div class="filter-bar" id="emergency-filters">
+                <button class="filter-chip active" data-filter="all">All</button>
+                <button class="filter-chip" data-filter="critical">🔴 Critical</button>
+                <button class="filter-chip" data-filter="high">🟠 High</button>
+                <button class="filter-chip" data-filter="medium">🟡 Medium</button>
+                <button class="filter-chip" data-filter="low">🟢 Low</button>
+            </div>
+            <div class="emergency-grid" id="emergency-grid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- ─── VOLUNTEERS PAGE ─────────────────────────────────── -->
+        <section class="page" id="page-volunteers">
+            <div class="page-header">
+                <div>
+                    <h1>Volunteer Coordination</h1>
+                    <p class="page-subtitle">Manage, verify, and deploy volunteers with AI matching</p>
+                </div>
+                <button class="btn btn-primary" id="btn-ai-match">
+                    <i class="fas fa-brain"></i> AI Match
+                </button>
+            </div>
+            <div class="volunteer-stats">
+                <div class="vol-stat"><span class="vol-stat-value">847</span><span>Total Registered</span></div>
+                <div class="vol-stat"><span class="vol-stat-value">234</span><span>Currently Active</span></div>
+                <div class="vol-stat"><span class="vol-stat-value">92%</span><span>Verification Rate</span></div>
+                <div class="vol-stat"><span class="vol-stat-value">4.7</span><span>Avg Trust Score</span></div>
+            </div>
+            <div class="volunteer-grid" id="volunteer-grid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- ─── CRISIS MAP PAGE ─────────────────────────────────── -->
+        <section class="page" id="page-map">
+            <div class="page-header">
+                <div>
+                    <h1>Crisis Map</h1>
+                    <p class="page-subtitle">Real-time geospatial intelligence powered by Google Maps</p>
+                </div>
+                <div class="map-controls">
+                    <button class="btn btn-ghost btn-sm" id="btn-heatmap"><i class="fas fa-fire"></i> Heatmap</button>
+                    <button class="btn btn-ghost btn-sm" id="btn-clusters"><i class="fas fa-layer-group"></i> Clusters</button>
+                    <button class="btn btn-ghost btn-sm" id="btn-routes"><i class="fas fa-route"></i> Routes</button>
+                </div>
+            </div>
+            <div class="full-map-container" id="full-map"></div>
+        </section>
+
+        <!-- ─── AI ENGINE PAGE ──────────────────────────────────── -->
+        <section class="page" id="page-ai">
+            <div class="page-header">
+                <div>
+                    <h1>AI Intelligence Engine</h1>
+                    <p class="page-subtitle">Powered by Google Gemini 2.0 Flash</p>
+                </div>
+                <span class="badge badge-ai badge-lg"><i class="fas fa-microchip"></i> Gemini 2.0 Flash</span>
+            </div>
+
+            <div class="ai-grid">
+                <div class="ai-card" id="ai-severity">
+                    <div class="ai-card-icon"><i class="fas fa-gauge-high"></i></div>
+                    <h3>Crisis Severity Prediction</h3>
+                    <p>Real-time severity analysis using FEMA/UNDP frameworks. Analyzes text, images, and geospatial data.</p>
+                    <div class="ai-card-stats">
+                        <span><strong>94.2%</strong> Accuracy</span>
+                        <span><strong>1.2s</strong> Avg Latency</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm" id="btn-test-severity">Test Prediction →</button>
+                </div>
+
+                <div class="ai-card" id="ai-matching">
+                    <div class="ai-card-icon"><i class="fas fa-people-arrows"></i></div>
+                    <h3>Volunteer Skill Matching</h3>
+                    <p>Multi-factor AI matching considering skills, proximity, trust score, language, and past performance.</p>
+                    <div class="ai-card-stats">
+                        <span><strong>96.8%</strong> Match Quality</span>
+                        <span><strong>0.8s</strong> Avg Latency</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm">View Matches →</button>
+                </div>
+
+                <div class="ai-card" id="ai-demand">
+                    <div class="ai-card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Resource Demand Prediction</h3>
+                    <p>Forecasts resource needs using WHO/SPHERE standards with 24-168 hour prediction windows.</p>
+                    <div class="ai-card-stats">
+                        <span><strong>91.5%</strong> Accuracy</span>
+                        <span><strong>2.1s</strong> Avg Latency</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm">Run Forecast →</button>
+                </div>
+
+                <div class="ai-card" id="ai-fraud">
+                    <div class="ai-card-icon"><i class="fas fa-shield-halved"></i></div>
+                    <h3>Fraud Detection</h3>
+                    <p>Identifies fake volunteers, duplicate reports, and suspicious behavior patterns in real-time.</p>
+                    <div class="ai-card-stats">
+                        <span><strong>98.1%</strong> Detection</span>
+                        <span><strong>0.3s</strong> Avg Latency</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm">View Alerts →</button>
+                </div>
+
+                <div class="ai-card" id="ai-translate">
+                    <div class="ai-card-icon"><i class="fas fa-language"></i></div>
+                    <h3>Multilingual Communication</h3>
+                    <p>Real-time disaster terminology translation across 100+ languages with context preservation.</p>
+                    <div class="ai-card-stats">
+                        <span><strong>50+</strong> Languages</span>
+                        <span><strong>0.5s</strong> Avg Latency</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm" id="btn-test-translate">Test Translation →</button>
+                </div>
+
+                <div class="ai-card" id="ai-routes">
+                    <div class="ai-card-icon"><i class="fas fa-route"></i></div>
+                    <h3>Route Optimization</h3>
+                    <p>Optimized dispatch routes using Google Maps APIs for fastest volunteer deployment.</p>
+                    <div class="ai-card-stats">
+                        <span><strong>34%</strong> Time Saved</span>
+                        <span><strong>1.5s</strong> Avg Latency</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm">Optimize →</button>
+                </div>
+            </div>
+
+            <!-- AI Test Console -->
+            <div class="card ai-console" id="ai-console">
+                <div class="card-header">
+                    <h2><i class="fas fa-terminal"></i> AI Test Console</h2>
+                    <span class="badge badge-success">Connected</span>
+                </div>
+                <div class="console-body">
+                    <textarea id="ai-input" placeholder="Describe an emergency to test AI severity prediction...&#10;&#10;Example: Major earthquake measuring 7.2 on Richter scale struck coastal Gujarat. Multiple buildings collapsed in Bhuj district. Estimated 5000+ people affected. Roads severely damaged, communication lines down." rows="4"></textarea>
+                    <button class="btn btn-primary" id="btn-run-ai">
+                        <i class="fas fa-play"></i> Run AI Analysis
+                    </button>
+                    <div class="console-output" id="ai-output">
+                        <div class="console-placeholder">
+                            <i class="fas fa-microchip"></i>
+                            <p>AI output will appear here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── ANALYTICS PAGE ──────────────────────────────────── -->
+        <section class="page" id="page-analytics">
+            <div class="page-header">
+                <div>
+                    <h1>Analytics Dashboard</h1>
+                    <p class="page-subtitle">Data-driven insights for strategic decision making</p>
+                </div>
+                <div class="header-actions">
+                    <select class="select-styled" id="analytics-period">
+                        <option value="7d">Last 7 Days</option>
+                        <option value="30d" selected>Last 30 Days</option>
+                        <option value="90d">Last 90 Days</option>
+                        <option value="1y">Last Year</option>
+                    </select>
+                    <button class="btn btn-ghost"><i class="fas fa-download"></i> Export</button>
+                </div>
+            </div>
+            <div class="analytics-grid" id="analytics-grid">
+                <div class="card analytics-chart">
+                    <h3>Emergency Trends</h3>
+                    <canvas id="chart-trends" height="250"></canvas>
+                </div>
+                <div class="card analytics-chart">
+                    <h3>Volunteer Deployment</h3>
+                    <canvas id="chart-volunteers" height="250"></canvas>
+                </div>
+                <div class="card analytics-chart">
+                    <h3>Response Time Distribution</h3>
+                    <canvas id="chart-response" height="250"></canvas>
+                </div>
+                <div class="card analytics-chart">
+                    <h3>Resource Utilization</h3>
+                    <canvas id="chart-resources" height="250"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- EMERGENCY REPORT MODAL                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="emergency-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-triangle-exclamation"></i> Report Emergency</h2>
+                <button class="btn-icon modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="emergency-form" class="modal-body">
+                <div class="form-group">
+                    <label for="em-title">Emergency Title</label>
+                    <input type="text" id="em-title" placeholder="Brief description of the emergency" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="em-type">Type</label>
+                        <select id="em-type" required>
+                            <option value="flood">🌊 Flood</option>
+                            <option value="earthquake">🏚️ Earthquake</option>
+                            <option value="fire">🔥 Fire</option>
+                            <option value="medical">🏥 Medical</option>
+                            <option value="cyclone">🌀 Cyclone</option>
+                            <option value="epidemic">🦠 Epidemic</option>
+                            <option value="accident">💥 Accident</option>
+                            <option value="landslide">⛰️ Landslide</option>
+                            <option value="other">📋 Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="em-affected">Affected People</label>
+                        <input type="number" id="em-affected" placeholder="Estimated number" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="em-description">Detailed Description</label>
+                    <textarea id="em-description" rows="4" placeholder="Provide detailed information about the emergency..." required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="em-lat">Latitude</label>
+                        <input type="number" id="em-lat" step="0.0001" placeholder="e.g., 19.076">
+                    </div>
+                    <div class="form-group">
+                        <label for="em-lng">Longitude</label>
+                        <input type="number" id="em-lng" step="0.0001" placeholder="e.g., 72.877">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>AI will automatically predict severity</label>
+                    <div class="ai-badge-inline">
+                        <i class="fas fa-brain"></i> Gemini 2.0 Flash — Auto-severity prediction enabled
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger btn-full">
+                    <i class="fas fa-paper-plane"></i> Submit Emergency Report
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- NOTIFICATION PANEL                                          -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="notification-panel" id="notification-panel">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button class="btn btn-ghost btn-sm">Mark all read</button>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <div class="notification-item unread">
+                <div class="notification-icon critical"><i class="fas fa-exclamation-triangle"></i></div>
+                <div>
+                    <strong>CRITICAL: Earthquake in Gujarat</strong>
+                    <p>7.2 magnitude detected. Auto-escalation triggered.</p>
+                    <span class="notification-time">2 min ago</span>
+                </div>
+            </div>
+            <div class="notification-item unread">
+                <div class="notification-icon success"><i class="fas fa-check-circle"></i></div>
+                <div>
+                    <strong>45 volunteers matched</strong>
+                    <p>AI matched volunteers for Mumbai flood response.</p>
+                    <span class="notification-time">15 min ago</span>
+                </div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-icon warning"><i class="fas fa-box-open"></i></div>
+                <div>
+                    <strong>Resource alert</strong>
+                    <p>Medical supplies running low at Pune warehouse.</p>
+                    <span class="notification-time">1 hour ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <!-- App -->
+    <script src="src/services/api.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>
