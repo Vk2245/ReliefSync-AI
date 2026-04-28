@@ -6,7 +6,6 @@ pydantic-settings==2.7.1
 
 # Supabase (replaces Firebase/Firestore)
 supabase==2.3.4
-postgrest==0.15.0
 
 # Google AI & Maps
 google-generativeai==0.8.4
