@@ -4,7 +4,7 @@
  */
 const API_BASE = window.location.hostname === 'localhost'
   ? 'http://localhost:8080/api/v1'
-  : '/api/v1';
+  : 'https://reliefsync-ai-8q3l.onrender.com/api/v1';
 
 class ReliefSyncAPI {
   constructor() {
